@@ -10,9 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import com.bol.mancala.controller.dto.ConnectRequest;
 import com.bol.mancala.dto.Game;
-import com.bol.mancala.dto.GameStatus;
 import com.bol.mancala.service.IBoardGame;
-import com.bol.mancala.service.MancalaGame;
 
 
 /**

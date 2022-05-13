@@ -43,9 +43,12 @@ function move(pileId) {
 function drawGameBoard(message) {
     $("#gameStatus").text(message.gameStatus);
     $("#winner").text(message.winner);
+    $("#gameId").text(message.gameId);
+    $("#player1").text(message.player1.name);
+    $("#player2").text(message.player2.name);
     pits = message.pits;
     for (i=0; i<14; i++) {
-    	$("#"+i).text(pits.numPebbles[i]);
+    	$("#"+i).text(pits[i].numPebbles);
     }
 }
 

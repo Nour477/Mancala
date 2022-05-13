@@ -35,7 +35,9 @@ public class MancalaGame implements IBoardGame {
     public Game createGame(String playerName) {
         Game game = new Game();       
         Player player1= new Player(playerName); 
+        Player player2= new Player("Empty Player"); 
         game.setPlayer1(player1);
+        game.setPlayer1(player2);
         LinkedList<Pile> pits = new LinkedList<Pile>(); // creates a new list of piles
 		// fills one side of piles LinkedList with 6 piles (4 pebbles each)
 		for (int i = 0; i < 6; i++) {
