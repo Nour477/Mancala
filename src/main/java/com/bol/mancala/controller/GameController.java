@@ -8,7 +8,6 @@ import org.springframework.stereotype.Controller;
 import com.bol.mancala.dto.Game;
 import com.bol.mancala.service.IBoardGame;
 
-
 /**
  * The Class GameController.
  *
@@ -17,8 +16,8 @@ import com.bol.mancala.service.IBoardGame;
 @Controller
 public class GameController {
 
-	 @Autowired
-	 private IBoardGame mancalaGame; 
+	@Autowired
+	private IBoardGame mancalaGame;
 
 	/**
 	 * Start.
@@ -28,21 +27,22 @@ public class GameController {
 	 */
 	@MessageMapping("/start")
 	@SendTo("/topic/game")
-	public Game start() throws Exception {
-		Game game= mancalaGame.createGame("Nour");
+	public Game start(String name) throws Exception {
+		Game game = mancalaGame.createGame(name);
 		return game;
 	}
-	
-//	@MessageMapping("/connectToGame")
-//	@SendTo("/topic/game")
-//	public Game connectToGame() throws Exception {
-//		Game gameBoard= mancalaGame.createGame("Nour");
-//		//Game gameBoard = mancalaGame.getCurrentGameBoard();
-//		return gameBoard;
-//	}
-	
-	
-	
+
+	@MessageMapping("/connectToGame")
+	@SendTo("/topic/game")
+	public Game connectToGame(String input) throws Exception {
+		String[] param = new String[2];
+		param = input.split(",");
+		String playerName = param[0];
+		String gameId = param[1];
+		Game gameBoard = mancalaGame.connectToGame(playerName, gameId);
+		return gameBoard;
+	}
+
 	/**
 	 * Move.
 	 *
@@ -53,14 +53,12 @@ public class GameController {
 	@MessageMapping("/move")
 	@SendTo("/topic/game")
 	public Game move(String input) throws Exception {
-		String [] param =new String [2]; 
-		param = input.split(","); 
-		Integer currentPile= Integer. parseInt(param[0]);
-		String gameId = param[1]; 
+		String[] param = new String[2];
+		param = input.split(",");
+		Integer currentPile = Integer.parseInt(param[0]);
+		String gameId = param[1];
 		Game game = mancalaGame.getCurrentGameBoard(gameId);
-		mancalaGame.gamePlay(currentPile,gameId);
+		mancalaGame.gamePlay(currentPile, gameId);
 		return game;
 	}
-	
-
 }

@@ -18,6 +18,7 @@ import com.bol.mancala.storage.MancalaStorage;
 public class MancalaGame implements IBoardGame {
 	private static final Integer PILE_COUNT = 6;
 	private boolean isLandedMancala;
+
 	/**
 	 * Creates new game from player Name
 	 * 
@@ -28,6 +29,7 @@ public class MancalaGame implements IBoardGame {
 		// create players
 		Player player1 = new Player(playerName);
 		Player player2 = new Player("New Player");
+		player2.setDummy(true);
 		game.setPlayer1(player1);
 		game.setPlayer2(player2);
 		// create pits
@@ -36,9 +38,9 @@ public class MancalaGame implements IBoardGame {
 			pits.add(new Pit(PILE_COUNT));
 		}
 		pits.get(6).toggleMancala(); // make as First player Mancala
-		pits.get(6).setNumStones(0);;
+		pits.get(6).setNumStones(0);
 		pits.get(13).toggleMancala(); // make as Second player Mancala
-		pits.get(13).setNumStones(0);;
+		pits.get(13).setNumStones(0);
 		game.setPits(pits);
 		game.setGameId(UUID.randomUUID().toString());
 		game.setStatus(GameStatus.NEW);
@@ -52,56 +54,41 @@ public class MancalaGame implements IBoardGame {
 	 */
 	public void gamePlay(Integer move, String gameId) throws Exception {
 		Game game = getCurrentGameBoard(gameId);
+		game.setStatus(GameStatus.IN_PROGRESS);
 		LinkedList<Pit> gamePits = (LinkedList<Pit>) game.getPits();
 		if (!gamePits.get(move).isEmpty() && ((game.getTurn().equals(PlayerTurn.P2_Turn) && move > 6)
 				|| (game.getTurn().equals(PlayerTurn.P1_Turn) && move < 6))) {
 			isLandedMancala = false;
-			int nextPit =move ;
+			int nextPit = move;
 			nextPit++; // increment to get to next pile
-			while (!gamePits.get(move).isEmpty()) {
-				if (game.getTurn().equals(PlayerTurn.P1_Turn) && (nextPit == 6)) {
-					gamePits.get(6).addStone(); // adds pebble to player 1's
-												// mancala
-					if (gamePits.get(move).isLastStone() == true) {
-						isLandedMancala = true;
-					}
-					gamePits.get(move).removeStone();
-					nextPit++;
-				} else if (game.getTurn().equals(PlayerTurn.P2_Turn) && (nextPit == 13)) {
-					gamePits.get(13).addStone(); // adds pebble to player 2's
-													// mancala
-					if (gamePits.get(move).isLastStone() == true) {
-						isLandedMancala = true;
-					}
-					gamePits.get(move).removeStone();
-					// if the pebble is dropped into an empty pile,
-					nextPit++;
-				} else if ((game.getTurn().equals(PlayerTurn.P1_Turn) && nextPit == 13)
+			int numOfStones = gamePits.get(move).getStonesCount();
+			for (int i = 1; i <= numOfStones; i++) {
+				gamePits.get(move).removeStone();
+				gamePits.get(nextPit).addStone();
+				if ((game.getTurn().equals(PlayerTurn.P1_Turn) && nextPit == 13)
 						|| (game.getTurn().equals(PlayerTurn.P2_Turn) && nextPit == 6)) {
-					nextPit++;
-				} else if (gamePits.get(move).isLastStone() == true && gamePits.get(nextPit).isEmpty()
-						&& isAcrossFull(nextPit, gamePits) && isOnYourSide(nextPit, game.getTurn())) {
-					gamePits.get(move).removeStone();
-					if (game.getTurn().equals(PlayerTurn.P1_Turn) == true) {
-						gamePits.get(6).addStone();
-					} else {
-						gamePits.get(13).addStone();
-					}
+					gamePits.get(move).addStone();
+					gamePits.get(nextPit).removeStone();
+					i--;
+				}
+				if (((game.getTurn().equals(PlayerTurn.P2_Turn) && (nextPit == 13))
+						|| (game.getTurn().equals(PlayerTurn.P1_Turn) && (nextPit == 6))) && (i == numOfStones)) {
+					isLandedMancala = true;
+				}
 
+				if (gamePits.get(move).isEmpty() == true && gamePits.get(nextPit).isLastStone()
+						&& isAcrossFull(nextPit, gamePits) && isOnYourSide(nextPit, game.getTurn())) {
+					// remove added stone from next pit to add it to mancala
+					gamePits.get(nextPit).removeStone();
 					// remove all stones and add them to Player Mancala
 					int opStones = gamePits.get(12 - nextPit).getStonesCount();
 					gamePits.get(12 - nextPit).clearPit();
 					if (game.getTurn().equals(PlayerTurn.P1_Turn))
-						gamePits.get(6).setNumStones(gamePits.get(6).getStonesCount() + opStones);
+						gamePits.get(6).setNumStones(gamePits.get(6).getStonesCount() + opStones + 1);
 					else
-						gamePits.get(13).setNumStones(gamePits.get(13).getStonesCount() + opStones);
-
-					// do not need to update i
-				} else {
-					gamePits.get(move).removeStone();
-					gamePits.get(nextPit).addStone();
-					nextPit++;
+						gamePits.get(13).setNumStones(gamePits.get(13).getStonesCount() + opStones + 1);
 				}
+				nextPit++;
 				if (nextPit == 14) {
 					nextPit = 0;
 				}
@@ -126,11 +113,11 @@ public class MancalaGame implements IBoardGame {
 	 */
 	private void determineWinner(Game gameBoard) {
 		if (gameBoard.getPits().get(6).getStonesCount() > gameBoard.getPits().get(13).getStonesCount()) {
-			gameBoard.setWinner(gameBoard.getPlayer1());
+			gameBoard.setWinner(gameBoard.getPlayer1().getName());
 		} else if (gameBoard.getPits().get(6).getStonesCount() == gameBoard.getPits().get(13).getStonesCount()) {
 			gameBoard.setWinner(null);
 		} else {
-			gameBoard.setWinner(gameBoard.getPlayer2());
+			gameBoard.setWinner(gameBoard.getPlayer2().getName());
 		}
 	}
 
@@ -195,15 +182,16 @@ public class MancalaGame implements IBoardGame {
 		}
 	}
 
-	public Game connectToGame(Player player2, String gameId) throws Exception {
+	public Game connectToGame(String playerName, String gameId) throws Exception {
 		if (!MancalaStorage.getInstance().getGames().containsKey(gameId)) {
 			throw new Exception("Game Doesnt Exist");
 		}
 		Game game = MancalaStorage.getInstance().getGames().get(gameId);
-		if (game.getPlayer2() != null) {
+		if (!game.getPlayer2().isDummy()) {
 			throw new Exception("Game is already Occupied");
 		}
-		game.setPlayer2(player2);
+		Player player = new Player(playerName);
+		game.setPlayer2(player);
 		game.setStatus(GameStatus.IN_PROGRESS);
 		MancalaStorage.getInstance().setGame(game);
 		return game;

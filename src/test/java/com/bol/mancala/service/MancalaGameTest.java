@@ -57,7 +57,7 @@ public class MancalaGameTest {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		Assert.assertEquals("Nour", game.getWinner().getName());
+		Assert.assertEquals("Nour", game.getWinner());
 	}
 	
 	@Test
@@ -90,7 +90,7 @@ public class MancalaGameTest {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		Assert.assertEquals("New Player", game.getWinner().getName());
+		Assert.assertEquals("New Player", game.getWinner());
 		Assert.assertEquals(pits.get(6).getStonesCount(),19); //all stones moved to mancala as across is full
 		Assert.assertEquals(pits.get(13).getStonesCount(),20);
 	}

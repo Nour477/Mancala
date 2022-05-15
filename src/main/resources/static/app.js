@@ -33,12 +33,16 @@ function disconnect() {
 }
 
 function start() {
-    stompClient.send("/app/start", {}, {});
-}
-function connectToGame() {
-    stompClient.send("/app/connectToGame", {}, {});
+	var playerName =document.getElementById('playerName').value;
+    stompClient.send("/app/start", {}, playerName);
 }
 
+function connectToGame() {
+	var playerName =document.getElementById('playerName').value;
+	var gameId =document.getElementById('gameId').value;
+	var param = playerName+","+gameId; 
+    stompClient.send("/app/connectToGame", {}, param);
+}
 
 function move(pileId) {
 	var gameId =document.getElementById('gameId').value;
@@ -52,8 +56,8 @@ function drawGameBoard(message) {
       inputGameId.value=message.gameId;
      }
     $("#gameId").text(inputGameId.value); 
-    $("#gameStatus").text(message.gameStatus);
-    $("#winner").text(message.winner.name);
+    $("#gameStatus").text(message.status);
+    $("#winner").text(message.winner);
     $("#player1").text(message.player1.name);
     $("#player2").text(message.player2.name);
     pits = message.pits;
@@ -70,4 +74,5 @@ $(function () {
     $( "#disconnect" ).click(function() { disconnect(); });
     $( "#send" ).click(function() { sendMessage(); });
     $( "#start" ).click(function() { start(); });
+    $( "#connectToGame" ).click(function() { connectToGame(); });
 });

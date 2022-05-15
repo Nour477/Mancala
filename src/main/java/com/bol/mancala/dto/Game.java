@@ -16,7 +16,7 @@ public class Game {
 
 	public List<Pit> pits;
 	private GameStatus status;
-	private Player winner;
+	private String winner;
 	private String gameId;
 	private Player player1;
 	private Player player2;
@@ -30,11 +30,6 @@ public class Game {
 		this.turn = turn;
 	}
 
-	public Game(List<Pit> pits, String gameStatus, Player winner) {
-		this.pits = pits;
-		this.winner = winner;
-	}
-
 	public List<Pit> getPits() {
 		return pits;
 	}
@@ -43,11 +38,11 @@ public class Game {
 		this.pits = pits;
 	}
 
-	public Player getWinner() {
+	public String getWinner() {
 		return winner;
 	}
 
-	public void setWinner(Player winner) {
+	public void setWinner(String winner) {
 		this.winner = winner;
 	}
 
