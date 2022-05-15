@@ -53,7 +53,7 @@ function drawGameBoard(message) {
      }
     $("#gameId").text(inputGameId.value); 
     $("#gameStatus").text(message.gameStatus);
-    $("#winner").text(message.winner);
+    $("#winner").text(message.winner.name);
     $("#player1").text(message.player1.name);
     $("#player2").text(message.player2.name);
     pits = message.pits;

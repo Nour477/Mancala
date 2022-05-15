@@ -54,7 +54,7 @@ public class MancalaGame implements IBoardGame {
 		if (!gamePits.get(move).isEmpty() && ((game.getTurn().equals(PlayerTurn.P2_Turn) && move > 6)
 				|| (game.getTurn().equals(PlayerTurn.P1_Turn) && move < 6))) {
 			isLandedMancala = false;
-			int nextPit = move;
+			int nextPit =move ;
 			nextPit++; // increment to get to next pile
 			while (!gamePits.get(move).isEmpty()) {
 				if (game.getTurn().equals(PlayerTurn.P1_Turn) && (nextPit == 6)) {
@@ -97,9 +97,7 @@ public class MancalaGame implements IBoardGame {
 					// do not need to update i
 				} else {
 					gamePits.get(move).removeStone();
-					if (!gamePits.get(nextPit).isEmpty()) {
-						gamePits.get(nextPit).addStone();
-					}
+					gamePits.get(nextPit).addStone();
 					nextPit++;
 				}
 				if (nextPit == 14) {
@@ -114,6 +112,7 @@ public class MancalaGame implements IBoardGame {
 				}
 			}
 		}
+		game.setPits(gamePits);
 		isGameOver(game);
 		MancalaStorage.getInstance().setGame(game);
 	}
