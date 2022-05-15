@@ -10,18 +10,12 @@ import com.bol.mancala.dto.Player;
  */
 public interface IBoardGame {
 
-	public void determineWinner(Game gameBoard);
-
-	public void startNewGame();
-
-	public void isGameOver(Game game);
-
-	public void makeSingleMove(Integer currentPile);
-
 	public Game connectToGame(Player player, String gameId) throws Exception;
 
-	Game getCurrentGameBoard(String gameId);
+	public Game getCurrentGameBoard(String gameId) throws Exception;
 
 	public Game createGame(String string);
+
+	public void gamePlay(Integer currentPile, String gameId) throws Exception;
 
 }

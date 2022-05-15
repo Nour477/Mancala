@@ -4,37 +4,49 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * The Class GameBoard.
- *
- * @author ashraf
+ * The Class Game.
+ * 
+ * @author Nour
  */
 public class Game {
-	
+
 	public Game() {
 		super();
 	}
 
-	public List<Pile> pits;
+	public List<Pit> pits;
 	private GameStatus status;
 	private Player winner;
-	private String gameId; 
-	private Player player1; 
-	private Player player2; 
-	
-	public Game(List<Pile> pits, String gameStatus, Player winner) {
+	private String gameId;
+	private Player player1;
+	private Player player2;
+	private PlayerTurn turn;
+
+	public PlayerTurn getTurn() {
+		return turn;
+	}
+
+	public void setTurn(PlayerTurn turn) {
+		this.turn = turn;
+	}
+
+	public Game(List<Pit> pits, String gameStatus, Player winner) {
 		this.pits = pits;
 		this.winner = winner;
 	}
-	
-	public List<Pile> getPits() {
+
+	public List<Pit> getPits() {
 		return pits;
 	}
-	public void setPits(LinkedList<Pile> pits) {
+
+	public void setPits(LinkedList<Pit> pits) {
 		this.pits = pits;
 	}
+
 	public Player getWinner() {
 		return winner;
 	}
+
 	public void setWinner(Player winner) {
 		this.winner = winner;
 	}

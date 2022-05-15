@@ -1,14 +1,10 @@
 package com.bol.mancala.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
-import com.bol.mancala.controller.dto.ConnectRequest;
 import com.bol.mancala.dto.Game;
 import com.bol.mancala.service.IBoardGame;
 
@@ -22,7 +18,6 @@ import com.bol.mancala.service.IBoardGame;
 public class GameController {
 
 	 @Autowired
-//	private IBoardGame mancalaGame=new MancalaGame();
 	 private IBoardGame mancalaGame; 
 
 	/**
@@ -34,10 +29,20 @@ public class GameController {
 	@MessageMapping("/start")
 	@SendTo("/topic/game")
 	public Game start() throws Exception {
-		Game gameBoard= mancalaGame.createGame("Nour");
+		Game game= mancalaGame.createGame("Nour");
 		//Game gameBoard = mancalaGame.getCurrentGameBoard();
-		return gameBoard;
+		return game;
 	}
+	
+//	@MessageMapping("/connectToGame")
+//	@SendTo("/topic/game")
+//	public Game connectToGame() throws Exception {
+//		Game gameBoard= mancalaGame.createGame("Nour");
+//		//Game gameBoard = mancalaGame.getCurrentGameBoard();
+//		return gameBoard;
+//	}
+	
+	
 	
 	/**
 	 * Move.
@@ -48,16 +53,15 @@ public class GameController {
 	 */
 	@MessageMapping("/move")
 	@SendTo("/topic/game")
-	public Game move(Integer currentPile, String gameId) throws Exception {
-		mancalaGame.makeSingleMove(currentPile);
-		Game gameBoard = mancalaGame.getCurrentGameBoard(gameId);
-		return gameBoard;
+	public Game move(String input) throws Exception {
+		String [] param =new String [2]; 
+		param = input.split(","); 
+		Integer currentPile= Integer. parseInt(param[0]);
+		String gameId = param[1]; 
+		Game game = mancalaGame.getCurrentGameBoard(gameId);
+		mancalaGame.gamePlay(currentPile,gameId);
+		return game;
 	}
 	
-    @PostMapping("/connect")
-    public ResponseEntity<Object> connect(@RequestBody ConnectRequest request)throws Exception  {
-    //    log.info("connect request: {}", request);
-        return ResponseEntity.ok(mancalaGame.connectToGame(request.getPlayer(), request.getGameId()));
-    }
 
 }

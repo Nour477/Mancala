@@ -35,20 +35,30 @@ function disconnect() {
 function start() {
     stompClient.send("/app/start", {}, {});
 }
+function connectToGame() {
+    stompClient.send("/app/connectToGame", {}, {});
+}
+
 
 function move(pileId) {
-    stompClient.send("/app/move", {}, pileId);
+	var gameId =document.getElementById('gameId').value;
+	var param = pileId+","+gameId; 
+    stompClient.send("/app/move", {},param);
 }
 
 function drawGameBoard(message) {
+      var inputGameId = document.getElementById("gameId");
+      if (inputGameId.value != null ){
+      inputGameId.value=message.gameId;
+     }
+    $("#gameId").text(inputGameId.value); 
     $("#gameStatus").text(message.gameStatus);
     $("#winner").text(message.winner);
-    $("#gameId").text(message.gameId);
     $("#player1").text(message.player1.name);
     $("#player2").text(message.player2.name);
     pits = message.pits;
     for (i=0; i<14; i++) {
-    	$("#"+i).text(pits[i].numPebbles);
+    	$("#"+i).text(pits[i].stonesCount);
     }
 }
 

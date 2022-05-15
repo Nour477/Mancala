@@ -28,12 +28,29 @@
 				</form>
 			</div>
 		</div>
+		
+			<div class="row">
+			<div class="col-md-6">
+							<br/>
+								<br/>
+									<br/>
+						<span>Start New Game to Create a Game or Enter Game ID and Press "Connect To Game" to Connect to An Existing Game </span> 
+					<br/>
+						<br/>
+							<br/>
+					</div>
+			</div>
+		</div>
+		
 		<div class="row">
 			<div class="col-md-6">
 				<form class="form-inline">
 					<div class="form-group">
 						<button id="start" class="btn btn-default" type="submit">Start
 							New Game</button>
+						<span>Game ID: </span> 
+						<input type="text" id="gameId" size="40"/><br><br>
+						<button id="connectToGame" class="btn btn-default" type="submit">Connect TO Game</button>
 					</div>
 				</form>
 			</div>
@@ -41,12 +58,11 @@
 		<div class="row">
 		<div class="row row-centered">
 			<span id="gameStatus"></span> <span id="winner"></span> 
-			<span id="player1"></span> <span id="player2"></span>
-			<span id="gameId"></span>
+			
 		</div>
 		<div class="row row-centered">
 			<div class="col-sm-1 col-centered">
-				<span>Player.1</span>
+				<span id="player1"></span>
 				<button id="6" class="btn btn-default btn-circle">0</button>
 			</div>
 			<div class="col-sm-3 col-centered">
@@ -84,11 +100,11 @@
 				</div>
 			</div>
 			<div class="col-sm-1 col-centered">
-				<span>Player.2</span>
+				<span id="player2"></span>
 				<button id="13" class="btn btn-default btn-circle">0</button>
 			</div>
 		</div>
 		</div>
-	</div>
+	
 </body>
 </html>
