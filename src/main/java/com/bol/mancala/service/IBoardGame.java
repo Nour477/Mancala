@@ -6,7 +6,7 @@ import com.bol.mancala.dto.Player;
 /**
  * The Interface IBoardGame.
  *
- * @author ashraf
+ * @author Nour
  */
 public interface IBoardGame {
 

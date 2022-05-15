@@ -12,7 +12,7 @@ import com.bol.mancala.service.IBoardGame;
 /**
  * The Class GameController.
  *
- * @author ashraf
+ * @author Nour
  */
 @Controller
 public class GameController {
@@ -30,7 +30,6 @@ public class GameController {
 	@SendTo("/topic/game")
 	public Game start() throws Exception {
 		Game game= mancalaGame.createGame("Nour");
-		//Game gameBoard = mancalaGame.getCurrentGameBoard();
 		return game;
 	}
 	
@@ -47,8 +46,8 @@ public class GameController {
 	/**
 	 * Move.
 	 *
-	 * @param currentPile the current pile
-	 * @return the game board
+	 * @param input the current pit
+	 * @return Game
 	 * @throws Exception the exception
 	 */
 	@MessageMapping("/move")

@@ -36,7 +36,9 @@ public class MancalaGame implements IBoardGame {
 			pits.add(new Pit(PILE_COUNT));
 		}
 		pits.get(6).toggleMancala(); // make as First player Mancala
+		pits.get(6).setNumStones(0);;
 		pits.get(13).toggleMancala(); // make as Second player Mancala
+		pits.get(13).setNumStones(0);;
 		game.setPits(pits);
 		game.setGameId(UUID.randomUUID().toString());
 		game.setStatus(GameStatus.NEW);
@@ -125,10 +127,10 @@ public class MancalaGame implements IBoardGame {
 	private void determineWinner(Game gameBoard) {
 		if (gameBoard.getPits().get(6).getStonesCount() > gameBoard.getPits().get(13).getStonesCount()) {
 			gameBoard.setWinner(gameBoard.getPlayer1());
-		} else if (gameBoard.getPits().get(6).getStonesCount() > gameBoard.getPits().get(13).getStonesCount()) {
+		} else if (gameBoard.getPits().get(6).getStonesCount() == gameBoard.getPits().get(13).getStonesCount()) {
 			gameBoard.setWinner(null);
 		} else {
-			gameBoard.setWinner(gameBoard.getPlayer1());
+			gameBoard.setWinner(gameBoard.getPlayer2());
 		}
 	}
 
