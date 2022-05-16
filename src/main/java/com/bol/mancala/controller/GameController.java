@@ -9,7 +9,6 @@ import com.bol.mancala.dto.Game;
 import com.bol.mancala.service.IBoardGame;
 
 /**
- * The Class GameController.
  *
  * @author Nour
  */
@@ -21,9 +20,9 @@ public class GameController {
 
 	/**
 	 * Start.
-	 *
-	 * @return the game board
-	 * @throws Exception the exception
+	 * @param name:PlayerName
+	 * @return Game
+	 * @throws Exception 
 	 */
 	@MessageMapping("/start")
 	@SendTo("/topic/game")
@@ -32,6 +31,13 @@ public class GameController {
 		return game;
 	}
 
+	/**
+	 * connectToGame.
+	 * @param input: String[PlayerName, GameId]
+	 * @return Game
+	 * @throws Exception 
+	 */
+	
 	@MessageMapping("/connectToGame")
 	@SendTo("/topic/game")
 	public Game connectToGame(String input) throws Exception {
@@ -39,26 +45,25 @@ public class GameController {
 		param = input.split(",");
 		String playerName = param[0];
 		String gameId = param[1];
-		Game gameBoard = mancalaGame.connectToGame(playerName, gameId);
-		return gameBoard;
+		Game game = mancalaGame.connectToGame(playerName, gameId);
+		return game;
 	}
-
 	/**
 	 * Move.
 	 *
-	 * @param input the current pit
+	 * @param input: String[current pit,GameId]
 	 * @return Game
-	 * @throws Exception the exception
+	 * @throws Exception 
 	 */
 	@MessageMapping("/move")
 	@SendTo("/topic/game")
 	public Game move(String input) throws Exception {
 		String[] param = new String[2];
 		param = input.split(",");
-		Integer currentPile = Integer.parseInt(param[0]);
+		Integer currentPit = Integer.parseInt(param[0]);
 		String gameId = param[1];
 		Game game = mancalaGame.getCurrentGameBoard(gameId);
-		mancalaGame.gamePlay(currentPile, gameId);
+		mancalaGame.gamePlay(currentPit, gameId);
 		return game;
 	}
 }

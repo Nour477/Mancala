@@ -2,7 +2,9 @@ package com.bol.mancala.service;
 
 import java.util.LinkedList;
 import java.util.UUID;
+
 import org.springframework.stereotype.Service;
+
 import com.bol.mancala.dto.Game;
 import com.bol.mancala.dto.GameStatus;
 import com.bol.mancala.dto.Pit;
@@ -48,9 +50,48 @@ public class MancalaGame implements IBoardGame {
 		MancalaStorage.getInstance().setGame(game);
 		return game;
 	}
+	
+	/**
+	 * Connects to Existing Game 
+	 * @param String PlayerName: Second Player Name 
+	 * @param String gameId: Id of the game to connect to 
+	 * @return Game
+	 */
+	public Game connectToGame(String playerName, String gameId) throws Exception {
+		if (!MancalaStorage.getInstance().getGames().containsKey(gameId)) {
+			throw new Exception("Game Doesnt Exist");
+		}
+		Game game = MancalaStorage.getInstance().getGames().get(gameId);
+		if (!game.getPlayer2().isDummy()) {
+			throw new Exception("Game is already Occupied");
+		}
+		Player player = new Player(playerName);
+		game.setPlayer2(player);
+		game.setStatus(GameStatus.IN_PROGRESS);
+		MancalaStorage.getInstance().setGame(game);
+		return game;
+	}
+	
+	/**
+	 * @param gameId takes gameId as a String Parameter
+	 * @return Game
+	 */
+	@Override
+	public Game getCurrentGameBoard(String gameId) throws Exception {
+		if (!MancalaStorage.getInstance().getGames().containsKey(gameId)) {
+			throw new Exception("Game not found");
+		}
+		Game game = MancalaStorage.getInstance().getGames().get(gameId);
+		if (game.getStatus().equals(GameStatus.FINISHED)) {
+			throw new Exception("Game is already finished");
+		}
+		return game;
+	}
 
 	/**
 	 * make a move to an Existing game
+	 * @param Integer move: Pit selected to move stones
+	 * @param String gameId: game Id to apply move to 
 	 */
 	public void gamePlay(Integer move, String gameId) throws Exception {
 		Game game = getCurrentGameBoard(gameId);
@@ -105,12 +146,14 @@ public class MancalaGame implements IBoardGame {
 		isGameOver(game);
 		MancalaStorage.getInstance().setGame(game);
 	}
-
-	/**
-	 * takes a Game as input and set the Winner to the game
-	 * 
-	 * @param Game
-	 */
+	
+	private void isGameOver(Game game) {
+		if (isAnySideEmpty((LinkedList<Pit>) game.getPits())) {
+			game.setStatus(GameStatus.FINISHED);
+			determineWinner(game);
+		}
+	}
+	
 	private void determineWinner(Game gameBoard) {
 		if (gameBoard.getPits().get(6).getStonesCount() > gameBoard.getPits().get(13).getStonesCount()) {
 			gameBoard.setWinner(gameBoard.getPlayer1().getName());
@@ -121,29 +164,7 @@ public class MancalaGame implements IBoardGame {
 		}
 	}
 
-	private void isGameOver(Game game) {
-		if (isAnySideEmpty((LinkedList<Pit>) game.getPits())) {
-			game.setStatus(GameStatus.FINISHED);
-			determineWinner(game);
-		}
-	}
-
-	/**
-	 * @param gameId takes gameId as a String Parameter
-	 * @return Game
-	 */
-	@Override
-	public Game getCurrentGameBoard(String gameId) throws Exception {
-		if (!MancalaStorage.getInstance().getGames().containsKey(gameId)) {
-			throw new Exception("Game not found");
-		}
-		Game game = MancalaStorage.getInstance().getGames().get(gameId);
-		if (game.getStatus().equals(GameStatus.FINISHED)) {
-			throw new Exception("Game is already finished");
-		}
-		return game;
-	}
-
+	//returns True is Any of the sides are Empty 
 	private boolean isAnySideEmpty(LinkedList<Pit> pits) {
 
 		int firstPlayerCounter = 0;
@@ -163,6 +184,7 @@ public class MancalaGame implements IBoardGame {
 		return false;
 	}
 
+	//returns True if Pit is on current Player Side 
 	public boolean isOnYourSide(Integer nationWide, PlayerTurn playerTurn) {
 		if (playerTurn.equals(PlayerTurn.P1_Turn) && nationWide <= 5) {
 			return true;
@@ -172,7 +194,7 @@ public class MancalaGame implements IBoardGame {
 			return false;
 		}
 	}
-
+	// returns true if the opposit Pit is not empty
 	public boolean isAcrossFull(int pitIndex, LinkedList<Pit> pits) {
 		Integer pileAcross = 12 - pitIndex;
 		if (pits.get(pileAcross).isEmpty()) {
@@ -180,20 +202,5 @@ public class MancalaGame implements IBoardGame {
 		} else {
 			return true;
 		}
-	}
-
-	public Game connectToGame(String playerName, String gameId) throws Exception {
-		if (!MancalaStorage.getInstance().getGames().containsKey(gameId)) {
-			throw new Exception("Game Doesnt Exist");
-		}
-		Game game = MancalaStorage.getInstance().getGames().get(gameId);
-		if (!game.getPlayer2().isDummy()) {
-			throw new Exception("Game is already Occupied");
-		}
-		Player player = new Player(playerName);
-		game.setPlayer2(player);
-		game.setStatus(GameStatus.IN_PROGRESS);
-		MancalaStorage.getInstance().setGame(game);
-		return game;
 	}
 }

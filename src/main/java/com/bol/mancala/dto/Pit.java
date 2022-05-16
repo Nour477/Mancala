@@ -8,8 +8,7 @@ package com.bol.mancala.dto;
 public class Pit {
 
 	private int stonesCount;
-	public boolean isMancala;// the mancalas can either be in the linked list
-	// and have booleans or be separate instance variables/piles
+	public boolean isMancala;
 
 	public Pit(Integer numStones) {
 		stonesCount = numStones;

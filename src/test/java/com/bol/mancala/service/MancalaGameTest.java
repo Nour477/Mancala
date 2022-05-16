@@ -26,7 +26,6 @@ public class MancalaGameTest {
 	Assert.assertEquals(6, pits.get(0).getStonesCount());
 	Assert.assertEquals(true, pits.get(6).isMancala);
 	Assert.assertEquals(0, pits.get(13).getStonesCount());
-	
 	}
 
 	@Test
@@ -94,5 +93,4 @@ public class MancalaGameTest {
 		Assert.assertEquals(game.getPlayer1().getName(),"Nour");
 		Assert.assertEquals(game.getPlayer2().getName(),"John");
 	}
-
 }

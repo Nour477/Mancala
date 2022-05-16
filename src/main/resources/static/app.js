@@ -2,18 +2,6 @@ var stompClient = null;
 $(document).ready(function() {
 	connect();
 });
-function setConnected(connected) {
-    $("#connect").prop("disabled", connected);
-    $("#disconnect").prop("disabled", !connected);
-    if (connected) {
-        $("#conversation").show();
-    }
-    else {
-        $("#conversation").hide();
-    }
-    $("#messages").html("");
-}
-
 function connect() {
     var socket = new SockJS('/websocket');
     stompClient = Stomp.over(socket);
