@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.bol.mancala.dto.Game;
 import com.bol.mancala.dto.Pit;
+import com.bol.mancala.dto.Player;
 import com.bol.mancala.dto.PlayerTurn;
 
 public class MancalaGameTest {
@@ -29,7 +30,7 @@ public class MancalaGameTest {
 	}
 
 	@Test
-	public void testGamePlay1() {
+	public void testGamePlay1() throws Exception {
 		//case player 1 won 
 		Pit mancalaP1 =new Pit (15); 
 		Pit mancalaP2 =new Pit (20); 
@@ -51,17 +52,13 @@ public class MancalaGameTest {
 		pits.add(mancalaP2); 
 		game.setPits((LinkedList<Pit>) pits);
 		game.setTurn(PlayerTurn.P1_Turn);
-		try {
-			mancalaGame.gamePlay(5,game.getGameId());
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
+		mancalaGame.gamePlay(5,game.getGameId());
 		Assert.assertEquals("Nour", game.getWinner());
 	}
 	
 	@Test
-	public void testGamePlay2() {
+	public void testGamePlay2() throws Exception {
 		//case player 2 won 
 		//testing is across full as Pits [4] is moved and pits [5] is 0 and pits [7] is full 
 		Pit mancalaP1 =new Pit (15); 
@@ -84,19 +81,18 @@ public class MancalaGameTest {
 		pits.add(mancalaP2); 
 		game.setPits((LinkedList<Pit>) pits);
 		game.setTurn(PlayerTurn.P1_Turn);
-		try {
-			mancalaGame.gamePlay(4,game.getGameId());
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
+		mancalaGame.gamePlay(4,game.getGameId());
 		Assert.assertEquals("New Player", game.getWinner());
 		Assert.assertEquals(pits.get(6).getStonesCount(),19); //all stones moved to mancala as across is full
 		Assert.assertEquals(pits.get(13).getStonesCount(),20);
 	}
 	@Test
-	public void testConnectToGame() {
-		fail("Not yet implemented");
+	public void testConnectToGame() throws Exception {
+		Game game=mancalaGame.createGame("Nour");	
+		mancalaGame.connectToGame("John",game.getGameId()); 
+		Assert.assertEquals(game.getPlayer1().getName(),"Nour");
+		Assert.assertEquals(game.getPlayer2().getName(),"John");
 	}
 
 }

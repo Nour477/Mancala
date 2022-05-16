@@ -1,4 +1,7 @@
 var stompClient = null;
+$(document).ready(function() {
+	connect();
+});
 function setConnected(connected) {
     $("#connect").prop("disabled", connected);
     $("#disconnect").prop("disabled", !connected);
@@ -17,19 +20,10 @@ function connect() {
     stompClient.connect({}, function (frame) {
         setConnected(true);
         console.log('Connected: ' + frame);
-        //TODO It should subscribe with game id for multiple games
         stompClient.subscribe('/topic/game', function (message) {
         	drawGameBoard(JSON.parse(message.body));
         });
     });
-}
-
-function disconnect() {
-    if (stompClient != null) {
-        stompClient.disconnect();
-    }
-    setConnected(false);
-    console.log("Disconnected");
 }
 
 function start() {
