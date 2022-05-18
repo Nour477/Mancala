@@ -52,7 +52,7 @@ public class MancalaGameTest {
 		game.setPits((LinkedList<Pit>) pits);
 		game.setTurn(PlayerTurn.P1_Turn);
 
-		mancalaGame.gamePlay(5,game.getGameId());
+		mancalaGame.gamePlay(5,game.getGameId(),"Nour");
 		Assert.assertEquals("Nour", game.getWinner());
 	}
 	
@@ -81,7 +81,7 @@ public class MancalaGameTest {
 		game.setPits((LinkedList<Pit>) pits);
 		game.setTurn(PlayerTurn.P1_Turn);
 		
-		mancalaGame.gamePlay(4,game.getGameId());
+		mancalaGame.gamePlay(4,game.getGameId(), "New Player");
 		Assert.assertEquals("New Player", game.getWinner());
 		Assert.assertEquals(pits.get(6).getStonesCount(),19); //all stones moved to mancala as across is full
 		Assert.assertEquals(pits.get(13).getStonesCount(),20);

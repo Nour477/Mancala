@@ -93,12 +93,12 @@ public class MancalaGame implements IBoardGame {
 	 * @param Integer move: Pit selected to move stones
 	 * @param String gameId: game Id to apply move to 
 	 */
-	public void gamePlay(Integer move, String gameId) throws Exception {
+	public void gamePlay(Integer move, String gameId, String playerName ) throws Exception {
 		Game game = getCurrentGameBoard(gameId);
 		game.setStatus(GameStatus.IN_PROGRESS);
 		LinkedList<Pit> gamePits = (LinkedList<Pit>) game.getPits();
-		if (!gamePits.get(move).isEmpty() && ((game.getTurn().equals(PlayerTurn.P2_Turn) && move > 6)
-				|| (game.getTurn().equals(PlayerTurn.P1_Turn) && move < 6))) {
+		if (!gamePits.get(move).isEmpty() && ((game.getTurn().equals(PlayerTurn.P2_Turn)) && move > 6 && (game.getPlayer2().getName().equals(playerName)))
+				|| (game.getTurn().equals(PlayerTurn.P1_Turn) && move < 6)&& (game.getPlayer1().getName().equals(playerName))) {
 			isLandedMancala = false;
 			int nextPit = move;
 			nextPit++; // increment to get to next pile

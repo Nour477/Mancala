@@ -58,12 +58,13 @@ public class GameController {
 	@MessageMapping("/move")
 	@SendTo("/topic/game")
 	public Game move(String input) throws Exception {
-		String[] param = new String[2];
+		String[] param = new String[3];
 		param = input.split(",");
 		Integer currentPit = Integer.parseInt(param[0]);
 		String gameId = param[1];
+		String name = param[2];
 		Game game = mancalaGame.getCurrentGameBoard(gameId);
-		mancalaGame.gamePlay(currentPit, gameId);
+		mancalaGame.gamePlay(currentPit, gameId, name);
 		return game;
 	}
 }

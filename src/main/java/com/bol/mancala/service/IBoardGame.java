@@ -15,6 +15,6 @@ public interface IBoardGame {
 
 	public Game createGame(String string);
 
-	public void gamePlay(Integer currentPile, String gameId) throws Exception;
+	public void gamePlay(Integer currentPile, String gameId, String playerName) throws Exception;
 
 }

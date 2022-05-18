@@ -1,4 +1,5 @@
 var stompClient = null;
+var messageGameId =null; 
 $(document).ready(function() {
 	connect();
 });
@@ -6,14 +7,20 @@ function connect() {
     var socket = new SockJS('/websocket');
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
-        setConnected(true);
         console.log('Connected: ' + frame);
         stompClient.subscribe('/topic/game', function (message) {
+        	var gameId =document.getElementById('gameId').value;
+
+        	if (!messageGameId ||  JSON.parse(message.body).gameId==messageGameId )
+        	{
+        	alert(messageGameId);
+        	messageGameId = JSON.parse(message.body).gameId;
         	drawGameBoard(JSON.parse(message.body));
+        	}
         });
     });
 }
-
+ 
 function start() {
 	var playerName =document.getElementById('playerName').value;
     stompClient.send("/app/start", {}, playerName);
@@ -28,7 +35,8 @@ function connectToGame() {
 
 function move(pileId) {
 	var gameId =document.getElementById('gameId').value;
-	var param = pileId+","+gameId; 
+	var playerName =document.getElementById('playerName').value;
+	var param = pileId+","+gameId +","+playerName; 
     stompClient.send("/app/move", {},param);
 }
 
