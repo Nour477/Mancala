@@ -1,13 +1,13 @@
 package com.bol.mancala.service;
 
-import com.bol.mancala.dto.Game;
+import com.bol.mancala.model.Game;
 
 /**
  * The Interface IBoardGame.
  *
  * @author Nour
  */
-public interface IBoardGame {
+public interface MancalaGameService {
 
 	public Game connectToGame(String playerName, String gameId) throws Exception;
 
@@ -15,6 +15,6 @@ public interface IBoardGame {
 
 	public Game createGame(String string);
 
-	public void gamePlay(Integer currentPile, String gameId, String playerName) throws Exception;
+	public void gamePlay(int currentPile, String gameId, String playerName) throws Exception;
 
 }

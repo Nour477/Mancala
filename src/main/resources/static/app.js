@@ -1,5 +1,6 @@
 var stompClient = null;
 var messageGameId =null; 
+var playerId =null;
 $(document).ready(function() {
 	connect();
 });
@@ -9,14 +10,19 @@ function connect() {
     stompClient.connect({}, function (frame) {
         console.log('Connected: ' + frame);
         stompClient.subscribe('/topic/game', function (message) {
-        	var gameId =document.getElementById('gameId').value;
-
-        	if (!messageGameId ||  JSON.parse(message.body).gameId==messageGameId )
-        	{
-        	alert(messageGameId);
-        	messageGameId = JSON.parse(message.body).gameId;
-        	drawGameBoard(JSON.parse(message.body));
-        	}
+        var player2Dummy =JSON.parse(message.body).player2.dummy;
+        if (player2Dummy)
+        {
+        	playerId=JSON.parse(message.body).player1.id; 
+        }else if (!playerId)
+        {
+        	playerId=JSON.parse(message.body).player2.id; 
+        }
+    	var gameId =JSON.parse(message.body).gameId;
+    	if (!messageGameId ||  gameId==messageGameId )
+    	{messageGameId = gameId;
+    	 drawGameBoard(JSON.parse(message.body));
+    	}
         });
     });
 }
@@ -36,7 +42,7 @@ function connectToGame() {
 function move(pileId) {
 	var gameId =document.getElementById('gameId').value;
 	var playerName =document.getElementById('playerName').value;
-	var param = pileId+","+gameId +","+playerName; 
+	var param = pileId+","+gameId +","+playerId; 
     stompClient.send("/app/move", {},param);
 }
 

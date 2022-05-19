@@ -3,7 +3,7 @@ package com.bol.mancala.storage;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.bol.mancala.dto.Game;
+import com.bol.mancala.model.Game;
 
 public class MancalaStorage {
 

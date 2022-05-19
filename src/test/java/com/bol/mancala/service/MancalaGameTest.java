@@ -1,58 +1,43 @@
 package com.bol.mancala.service;
 
-import static org.junit.Assert.*;
-
-import java.util.LinkedList;
 import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.bol.mancala.dto.Game;
-import com.bol.mancala.dto.Pit;
-import com.bol.mancala.dto.Player;
-import com.bol.mancala.dto.PlayerTurn;
+import com.bol.mancala.controller.MancalaGameController;
+import com.bol.mancala.model.Game;
+import com.bol.mancala.model.Pit;
+import com.bol.mancala.utils.MancalaConstants;
 
 public class MancalaGameTest {
 	@Autowired
-	private IBoardGame mancalaGame =new MancalaGame();
+	private MancalaGameService mancalaGame =new MancalaGameController();
 
 	@Test
 	public void testCreateGame() {
-	Game game=mancalaGame.createGame("Nour");	
-	List<Pit> pits = game.getPits();
-	Assert.assertEquals(14, pits.size());
-	Assert.assertEquals(6, pits.get(0).getStonesCount());
-	Assert.assertEquals(true, pits.get(6).isMancala);
-	Assert.assertEquals(0, pits.get(13).getStonesCount());
+		Game game=mancalaGame.createGame("Nour");	
+		List<Pit> pits = game.getPits();
+		Assert.assertEquals(14, pits.size());
+		Assert.assertEquals(6, pits.get(0).getStonesCount());
+		Assert.assertEquals(true, pits.get(6).isMancala);
+		Assert.assertEquals(0, pits.get(13).getStonesCount());
 	}
 
 	@Test
 	public void testGamePlay1() throws Exception {
 		//case player 1 won 
-		Pit mancalaP1 =new Pit (15); 
-		Pit mancalaP2 =new Pit (20); 
 		Game game=mancalaGame.createGame("Nour");
-		List<Pit> pits =new LinkedList <Pit> (); 
-		pits.add(new Pit(0)); 
-		pits.add(new Pit(0)); 
-		pits.add(new Pit(0)); 
-		pits.add(new Pit(0)); 
-		pits.add(new Pit(0)); 
-		pits.add(new Pit(1)); 
-		pits.add(mancalaP1); 
-		pits.add(new Pit(0)); 
-		pits.add(new Pit(0)); 
-		pits.add(new Pit(3)); 
-		pits.add(new Pit(0)); 
-		pits.add(new Pit(5)); 
-		pits.add(new Pit(0)); 
-		pits.add(mancalaP2); 
-		game.setPits((LinkedList<Pit>) pits);
-		game.setTurn(PlayerTurn.P1_Turn);
+		game.getPits().get(MancalaConstants.PLAYER1_MANCALA).setNumStones(22);
+		game.getPits().get(MancalaConstants.PLAYER2_MANCALA).setNumStones(20);
+		game.getPits().get(0).setNumStones(0);
+		game.getPits().get(1).setNumStones(0);
+		game.getPits().get(2).setNumStones(0);
+		game.getPits().get(3).setNumStones(0);
+		game.getPits().get(4).setNumStones(0);
 
-		mancalaGame.gamePlay(5,game.getGameId(),"Nour");
+		mancalaGame.gamePlay(5,game.getGameId(),game.getPlayer1().getId());
 		Assert.assertEquals("Nour", game.getWinner());
 	}
 	
@@ -60,31 +45,27 @@ public class MancalaGameTest {
 	public void testGamePlay2() throws Exception {
 		//case player 2 won 
 		//testing is across full as Pits [4] is moved and pits [5] is 0 and pits [7] is full 
-		Pit mancalaP1 =new Pit (15); 
-		Pit mancalaP2 =new Pit (20); 
-		Game game=mancalaGame.createGame("Nour");
-		List<Pit> pits =new LinkedList <Pit> (); 
-		pits.add(new Pit(0)); 
-		pits.add(new Pit(0)); 
-		pits.add(new Pit(0)); 
-		pits.add(new Pit(0)); 
-		pits.add(new Pit(1)); 
-		pits.add(new Pit(0)); 
-		pits.add(mancalaP1); 
-		pits.add(new Pit(3)); 
-		pits.add(new Pit(0)); 
-		pits.add(new Pit(0)); 
-		pits.add(new Pit(0)); 
-		pits.add(new Pit(0)); 
-		pits.add(new Pit(0)); 
-		pits.add(mancalaP2); 
-		game.setPits((LinkedList<Pit>) pits);
-		game.setTurn(PlayerTurn.P1_Turn);
 		
-		mancalaGame.gamePlay(4,game.getGameId(), "New Player");
+		Game game=mancalaGame.createGame("Nour");
+		game.getPits().get(MancalaConstants.PLAYER1_MANCALA).setNumStones(15);
+		game.getPits().get(MancalaConstants.PLAYER2_MANCALA).setNumStones(20);
+		game.getPits().get(0).setNumStones(0);
+		game.getPits().get(1).setNumStones(0);
+		game.getPits().get(2).setNumStones(0);
+		game.getPits().get(3).setNumStones(0);
+		game.getPits().get(4).setNumStones(1);
+		game.getPits().get(5).setNumStones(0);
+		game.getPits().get(7).setNumStones(3);
+		game.getPits().get(8).setNumStones(0);
+		game.getPits().get(9).setNumStones(0);
+		game.getPits().get(10).setNumStones(0);
+		game.getPits().get(11).setNumStones(0);
+		game.getPits().get(12).setNumStones(0);
+
+		mancalaGame.gamePlay(4,game.getGameId(),game.getPlayer1().getId());
 		Assert.assertEquals("New Player", game.getWinner());
-		Assert.assertEquals(pits.get(6).getStonesCount(),19); //all stones moved to mancala as across is full
-		Assert.assertEquals(pits.get(13).getStonesCount(),20);
+		Assert.assertEquals(game.getPits().get(MancalaConstants.PLAYER1_MANCALA).getStonesCount(),19); //all stones moved to mancala as across is full
+		Assert.assertEquals(game.getPits().get(MancalaConstants.PLAYER2_MANCALA).getStonesCount(),20);
 	}
 	@Test
 	public void testConnectToGame() throws Exception {

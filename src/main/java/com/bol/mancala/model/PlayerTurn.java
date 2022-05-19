@@ -1,4 +1,4 @@
-package com.bol.mancala.dto;
+package com.bol.mancala.model;
 
 public enum PlayerTurn {
 	P1_Turn, P2_Turn,

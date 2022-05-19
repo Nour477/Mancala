@@ -1,4 +1,4 @@
-package com.bol.mancala.dto;
+package com.bol.mancala.model;
 
 /**
  * The Class Pit.

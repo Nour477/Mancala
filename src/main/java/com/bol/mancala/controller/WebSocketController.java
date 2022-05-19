@@ -5,18 +5,18 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 
-import com.bol.mancala.dto.Game;
-import com.bol.mancala.service.IBoardGame;
+import com.bol.mancala.model.Game;
+import com.bol.mancala.service.MancalaGameService;
 
 /**
  *
  * @author Nour
  */
 @Controller
-public class GameController {
+public class WebSocketController {
 
 	@Autowired
-	private IBoardGame mancalaGame;
+	private MancalaGameService mancalaGame;
 
 	/**
 	 * Start.
@@ -60,11 +60,11 @@ public class GameController {
 	public Game move(String input) throws Exception {
 		String[] param = new String[3];
 		param = input.split(",");
-		Integer currentPit = Integer.parseInt(param[0]);
+		int currentPit = Integer.parseInt(param[0]);
 		String gameId = param[1];
-		String name = param[2];
+		String playerId = param[2];
 		Game game = mancalaGame.getCurrentGameBoard(gameId);
-		mancalaGame.gamePlay(currentPit, gameId, name);
+		mancalaGame.gamePlay(currentPit, gameId, playerId);
 		return game;
 	}
 }
